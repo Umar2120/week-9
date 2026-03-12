@@ -49,7 +49,7 @@ export default function HomeClient({
   const [showFavs, setShowFavs] = useState(false);
   const [moodRows, setMoodRows] = useState<MovieRow[]>([]);
   const [moodInfo, setMoodInfo] = useState<MoodMatch | null>(null);
-  const { favs }: { favs: Movie[] } = useFavs();
+  const { favs } = useFavs();
 
   const extraIndexRef = useRef(0);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -119,7 +119,7 @@ export default function HomeClient({
               <div>
                 <h4>AI Mood Picks</h4>
                 <p>
-                  Based on: &quot;{moodInfo?.input}&quot; · Match: {moodInfo?.profileLabel} ({moodInfo?.confidence}%)
+                  Based on: &quot;{moodInfo?.input}&quot; - Match: {moodInfo?.profileLabel} ({moodInfo?.confidence}%)
                 </p>
               </div>
               <button
@@ -171,3 +171,4 @@ export default function HomeClient({
     </div>
   );
 }
+
