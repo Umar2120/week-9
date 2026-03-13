@@ -15,6 +15,7 @@ import Navbar from "../components/Navbar";
 import { GENRE_NAME_MAP } from "../utils/moodMatcher";
 
 const API_MISSING = !process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const GENRE_NAME_BY_ID = GENRE_NAME_MAP as Record<number, string>;
 
 type Movie = {
   id: number;
@@ -88,7 +89,7 @@ export default function HomeClient({
   const handleMoodMatch = (match: MoodMatch) => {
     const rows = match.genreIds.map((genreId: number, index: number): MovieRow => ({
       id: `mood-${genreId}-${index}`,
-      label: `${GENRE_NAME_MAP[genreId] || "Recommended"} for your mood`,
+      label: `${GENRE_NAME_BY_ID[genreId] || "Recommended"} for your mood`,
       fetch: (page: number) => getByGenre(genreId, page),
     }));
     setMoodRows(rows);
@@ -133,7 +134,12 @@ export default function HomeClient({
               </button>
             </div>
             {moodRows.map((row: MovieRow) => (
-              <HorizontalRow key={row.id} title={row.label} fetchFn={row.fetch} onMovieClick={setSelectedMovie} />
+              <HorizontalRow
+                key={row.id}
+                title={row.label}
+                fetchFn={row.fetch}
+                onMovieClick={(movie) => setSelectedMovie(movie as Movie)}
+              />
             ))}
           </section>
         )}
@@ -146,14 +152,19 @@ export default function HomeClient({
               key={`${activeCat}-${row.id}`}
               title={row.label}
               fetchFn={row.fetch}
-              onMovieClick={setSelectedMovie}
+              onMovieClick={(movie) => setSelectedMovie(movie as Movie)}
               initialMovies={row.id === "popular" ? initialPopularMovies : undefined}
               initialTotalPages={row.id === "popular" ? initialPopularTotalPages : undefined}
             />
           ))}
 
           {extraRows.map((row: MovieRow) => (
-            <HorizontalRow key={row.id} title={row.label} fetchFn={row.fetch} onMovieClick={setSelectedMovie} />
+            <HorizontalRow
+              key={row.id}
+              title={row.label}
+              fetchFn={row.fetch}
+              onMovieClick={(movie) => setSelectedMovie(movie as Movie)}
+            />
           ))}
 
           {loadingMore && (
